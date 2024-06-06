@@ -1,0 +1,32 @@
+:root {
+  --color-dark-shade: #6f6f66;
+  --color-darker-shade: #ecf3d3;
+}
+
+.dropdown-container {
+    text-align: left;
+    border: 1px solid #ccc;
+    position: relative;
+    border-radius: 5px;
+    width: 100%;
+}
+  
+.dropdown-input {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.dropdown-label-text-s {
+  font-size: 0.85rem;
+}
+
+.dropdown-label-hushed {
+  color: var(--color-dark-shade);
+}
+
+.dropdown-label-spacing {
+  margin-bottom: .4rem;
+}
