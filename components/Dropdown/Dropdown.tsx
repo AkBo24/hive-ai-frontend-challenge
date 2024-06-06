@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+'use client';
+import React, { ReactNode, useState } from 'react';
 import '@/components/Dropdown/styles.css';
 
 type DropdownProps<TOption> = {
@@ -30,6 +31,8 @@ function Dropdown<TOption>({
     renderOption = getOptionLabel<TOption>,
     DropdownIcon = Icon,
 }: DropdownProps<TOption>) {
+    const [open, setOpen] = useState<boolean>(false);
+
     const getDisplay = () => {
         return placeholder;
     };
@@ -40,7 +43,7 @@ function Dropdown<TOption>({
                 {label}
             </label>
             <div className='dropdown-container'>
-                <div className='dropdown-input'>
+                <div className='dropdown-input' onClick={() => setOpen(!open)}>
                     <div className='dropdown-selected-value'>{getDisplay()}</div>
                     <div className='dropdown-tools'>
                         <div className='dropdown-tool'>
@@ -49,9 +52,11 @@ function Dropdown<TOption>({
                     </div>
                 </div>
 
-                <div className='dropdown-menu'>
-                    {options.map((option, i) => renderOption(option))}
-                </div>
+                {open && (
+                    <div className='dropdown-menu'>
+                        {options.map((option, i) => renderOption(option))}
+                    </div>
+                )}
             </div>
         </>
     );
