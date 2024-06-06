@@ -8,7 +8,7 @@ export default function Home() {
             <h1 style={{ marginBottom: '2rem' }}>
                 Hive.AI Frontend Challenge - Akshay Bodla
             </h1>
-            <Dropdown
+            <Dropdown<string>
                 label='Color'
                 placeholder='Select...'
                 options={['red', 'blue', 'red']}

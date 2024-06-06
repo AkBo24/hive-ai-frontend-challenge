@@ -1,7 +1,8 @@
 :root {
   --color-dark-shade: #6f6f66;
   --color-darker-shade: #ecf3d3;
-  --color-hover: #9fc3f870
+  --color-hover: #9fc3f870;
+  --color-selected: #0d6efd
 }
 
 .dropdown-label-text-s {
@@ -52,4 +53,9 @@
 
 .dropdown-option:hover {
   background-color: var(--color-hover)
+}
+
+.dropdown-option-selected {
+  background-color: var(--color-selected);
+  color: #fff;
 }
