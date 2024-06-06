@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import styles from './page.module.css';
-import Dropdown from '@/components/Dropdown/Dropdown';
+import ControlledDropdown from '@/components/ControlledDropdown';
+import UncontrolledDropdown from '@/components/UncontrolledDropdown';
 
 export default function Home() {
     return (
@@ -8,11 +8,10 @@ export default function Home() {
             <h1 style={{ marginBottom: '2rem' }}>
                 Hive.AI Frontend Challenge - Akshay Bodla
             </h1>
-            <Dropdown<string>
-                label='Color (Uncontrolled & Single Select)'
-                placeholder='Select...'
-                options={['red', 'blue', 'red', 'orange']}
-            />
+            <div className={styles.dropdowns}>
+                <UncontrolledDropdown />
+                <ControlledDropdown />
+            </div>
         </main>
     );
 }

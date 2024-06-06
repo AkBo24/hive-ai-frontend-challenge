@@ -5,6 +5,12 @@
   min-height: 100vh;
 }
 
+.dropdowns {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;

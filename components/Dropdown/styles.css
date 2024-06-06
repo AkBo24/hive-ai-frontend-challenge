@@ -67,8 +67,8 @@
 }
 .dropdown-chip {
   background-color: #ddd;
-  padding: 2px 4px;
-  border-radius: 2px;
+  padding: 2px 6px;
+  border-radius: 13px;
   display: flex;
   align-items: center;
 }
