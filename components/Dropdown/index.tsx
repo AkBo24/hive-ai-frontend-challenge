@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import '@/components/Dropdown/styles.css';
 import {
     CloseIcon,
@@ -12,6 +12,10 @@ type DropdownProps<TOption> = {
     label?: string;
     multiple?: boolean;
     options: TOption[];
+    open?: boolean;
+    setOpen?(): void;
+    selectedOptions?: TOption[];
+    setSelectedOptions?(optoins: TOption[]): void;
     renderOption?: (item: TOption) => React.ReactNode;
     ClearIcon?: React.ElementType;
     DropdownIcon?: React.ElementType;
@@ -22,12 +26,18 @@ function Dropdown<TOption>({
     placeholder = '',
     multiple = false,
     options,
+    open: controlledOpen,
+    setOpen: controlledSetOpen,
+    selectedOptions: controlledSelectedOptions,
+    setSelectedOptions: controlledSetSelectedOptions,
     renderOption = (option: TOption) => `${option}`,
     ClearIcon = CloseIcon,
     DropdownIcon = DropdownIconComponent,
 }: DropdownProps<TOption>) {
-    const [open, setOpen] = useState<boolean>(false);
-    const [selectedOptions, setSetselectedOptions] = useState<Set<TOption>>(new Set());
+    const [open, setOpen] = useState<boolean>(controlledOpen ?? false);
+    const [selectedOptions, setSetselectedOptions] = useState<Set<TOption>>(
+        new Set(controlledSelectedOptions) ?? new Set()
+    );
 
     const getDisplay = () => {
         if (selectedOptions.size !== 0 && multiple) {
@@ -63,7 +73,15 @@ function Dropdown<TOption>({
                 {label}
             </label>
             <div className='dropdown-container'>
-                <div className='dropdown-input' onClick={() => setOpen(!open)}>
+                <div
+                    className='dropdown-input'
+                    onClick={() => {
+                        if (controlledSetOpen) {
+                            controlledSetOpen();
+                        } else {
+                            setOpen(!open);
+                        }
+                    }}>
                     <div className='dropdown-selected-value'>{getDisplay()}</div>
                     <div className='dropdown-tools'>
                         <div className='dropdown-tool'>
@@ -78,7 +96,7 @@ function Dropdown<TOption>({
                     </div>
                 </div>
 
-                {open && (
+                {(controlledOpen ?? open) && (
                     <div className={`dropdown-menu`}>
                         {options.map((option, i) => (
                             <GetOptionLabel
