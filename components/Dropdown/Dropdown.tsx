@@ -5,6 +5,7 @@ import '@/components/Dropdown/styles.css';
 type RenderOptionProps<TOption> = {
     option: TOption;
     selectedOptions: Set<TOption>;
+    multiple: boolean;
     setSetselectedOptions: React.Dispatch<React.SetStateAction<Set<TOption>>>;
 };
 
@@ -27,6 +28,7 @@ const Icon = () => {
 
 function GetOptionLabel<TOption>({
     option,
+    multiple,
     selectedOptions,
     setSetselectedOptions,
 }: RenderOptionProps<TOption>) {
@@ -34,10 +36,14 @@ function GetOptionLabel<TOption>({
         <p
             key={`option-${option}`}
             onClick={() => {
-                let newSet = new Set(selectedOptions);
-                if (selectedOptions.has(option)) newSet.delete(option);
-                else newSet.add(option);
-                setSetselectedOptions(newSet);
+                if (multiple) {
+                    let newSet = new Set(selectedOptions);
+                    if (selectedOptions.has(option)) newSet.delete(option);
+                    else newSet.add(option);
+                    setSetselectedOptions(newSet);
+                } else {
+                    setSetselectedOptions(new Set([option]));
+                }
             }}
             className={`dropdown-option ${
                 selectedOptions.has(option) && 'dropdown-option-selected'
@@ -46,6 +52,14 @@ function GetOptionLabel<TOption>({
         </p>
     );
 }
+
+const CloseIcon = () => {
+    return (
+        <svg height='20' width='20' viewBox='0 0 20 20'>
+            <path d='M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z'></path>
+        </svg>
+    );
+};
 
 function Dropdown<TOption>({
     label = '',
@@ -60,9 +74,25 @@ function Dropdown<TOption>({
 
     const getDisplay = () => {
         if (selectedOptions.size !== 0) {
-            return Array.from(selectedOptions).map((option) => (
-                <p key={`option-selected-${option}`}>{option as ReactNode},</p>
-            ));
+            return (
+                <div className='dropdown-chips'>
+                    {Array.from(selectedOptions).map((option) => (
+                        <div key={`option-selected-${option}`} className='dropdown-chip'>
+                            {option as ReactNode}
+                            <span
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const newSet = new Set(selectedOptions);
+                                    newSet.delete(option);
+                                    setSetselectedOptions(newSet);
+                                }}
+                                className='dropdown-chip-close'>
+                                <CloseIcon />
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            );
         }
         return placeholder;
     };
@@ -88,6 +118,7 @@ function Dropdown<TOption>({
                             <RenderOption
                                 key={`option-${i}`}
                                 option={option}
+                                multiple={multiple}
                                 selectedOptions={selectedOptions}
                                 setSetselectedOptions={setSetselectedOptions}
                             />

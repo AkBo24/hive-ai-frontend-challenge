@@ -59,3 +59,20 @@
   background-color: var(--color-selected);
   color: #fff;
 }
+
+.dropdown-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.dropdown-chip {
+  background-color: #ddd;
+  padding: 2px 4px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+}
+.dropdown-chip-close {
+  display: flex;
+  align-items: center;
+}

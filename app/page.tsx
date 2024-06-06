@@ -9,9 +9,9 @@ export default function Home() {
                 Hive.AI Frontend Challenge - Akshay Bodla
             </h1>
             <Dropdown<string>
-                label='Color'
+                label='Color (Uncontrolled & Single Select)'
                 placeholder='Select...'
-                options={['red', 'blue', 'red']}
+                options={['red', 'blue', 'red', 'orange']}
             />
         </main>
     );
