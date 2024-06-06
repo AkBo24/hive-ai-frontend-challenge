@@ -2,19 +2,20 @@
 import React, { ReactNode, useState } from 'react';
 import '@/components/Dropdown/styles.css';
 
-type RenderOptionProps<TOption> = {
+type RenderOptionProps<TOption extends ReactNode> = {
     option: TOption;
     selectedOptions: Set<TOption>;
     multiple: boolean;
     setSetselectedOptions: React.Dispatch<React.SetStateAction<Set<TOption>>>;
 };
 
-type DropdownProps<TOption> = {
+type DropdownProps<TOption extends ReactNode> = {
     placeholder?: string;
     label?: string;
     multiple?: boolean;
     options: TOption[];
     RenderOption?: React.ElementType<RenderOptionProps<TOption>>;
+    ClearIcon?: React.ElementType;
     DropdownIcon?: React.ElementType;
 };
 
@@ -26,7 +27,7 @@ const Icon = () => {
     );
 };
 
-function GetOptionLabel<TOption>({
+function GetOptionLabel<TOption extends ReactNode>({
     option,
     multiple,
     selectedOptions,
@@ -48,7 +49,7 @@ function GetOptionLabel<TOption>({
             className={`dropdown-option ${
                 selectedOptions.has(option) && 'dropdown-option-selected'
             }`}>
-            {option as ReactNode}
+            {option}
         </p>
     );
 }
@@ -61,24 +62,25 @@ const CloseIcon = () => {
     );
 };
 
-function Dropdown<TOption>({
+function Dropdown<TOption extends ReactNode>({
     label = '',
     placeholder = '',
     multiple = false,
     options,
     RenderOption = GetOptionLabel<TOption>,
+    ClearIcon = CloseIcon,
     DropdownIcon = Icon,
 }: DropdownProps<TOption>) {
     const [open, setOpen] = useState<boolean>(false);
     const [selectedOptions, setSetselectedOptions] = useState<Set<TOption>>(new Set());
 
     const getDisplay = () => {
-        if (selectedOptions.size !== 0) {
+        if (selectedOptions.size !== 0 && multiple) {
             return (
                 <div className='dropdown-chips'>
                     {Array.from(selectedOptions).map((option) => (
                         <div key={`option-selected-${option}`} className='dropdown-chip'>
-                            {option as ReactNode}
+                            {option}
                             <span
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -93,6 +95,8 @@ function Dropdown<TOption>({
                     ))}
                 </div>
             );
+        } else if (selectedOptions.size !== 0 && !multiple) {
+            return Array.from(selectedOptions)[0];
         }
         return placeholder;
     };
@@ -107,6 +111,12 @@ function Dropdown<TOption>({
                     <div className='dropdown-selected-value'>{getDisplay()}</div>
                     <div className='dropdown-tools'>
                         <div className='dropdown-tool'>
+                            {ClearIcon ? (
+                                <span onClick={() => setSetselectedOptions(new Set())}>
+                                    <ClearIcon />
+                                </span>
+                            ) : null}
+
                             <DropdownIcon />
                         </div>
                     </div>
