@@ -1,6 +1,7 @@
 :root {
   --color-dark-shade: #6f6f66;
   --color-darker-shade: #ecf3d3;
+  --color-hover: #9fc3f870
 }
 
 .dropdown-container {
@@ -29,4 +30,24 @@
 
 .dropdown-label-spacing {
   margin-bottom: .4rem;
+}
+
+.dropdown-menu {
+  position: absolute;
+  transform: translateY(4px);
+  width: 100%;
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  overflow: auto;
+  max-height: 150px; 
+  background-color:#fff;
+}
+
+.dropdown-option { 
+  padding: 5px;
+  cursor: pointer;
+}
+
+.dropdown-option:hover {
+  background-color: var(--color-hover)
 }

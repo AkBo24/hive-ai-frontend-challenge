@@ -1,10 +1,13 @@
-import React from 'react';
-import './styles.css';
+import React, { ReactNode } from 'react';
+import '@/components/Dropdown/styles.css';
 
-type DropdownProps = {
+type DropdownProps<TOption> = {
     placeholder?: string;
     label?: string;
     multiple?: boolean;
+    options: TOption[];
+    renderOption?: (option: TOption) => React.JSX.Element;
+    DropdownIcon?: React.ElementType;
 };
 
 const Icon = () => {
@@ -15,11 +18,18 @@ const Icon = () => {
     );
 };
 
-const Dropdown: React.FC<DropdownProps> = ({
+function getOptionLabel<TOption>(option: TOption) {
+    return <p className='dropdown-option'>{option as ReactNode}</p>;
+}
+
+function Dropdown<TOption>({
     label = '',
     placeholder = '',
     multiple = false,
-}) => {
+    options,
+    renderOption = getOptionLabel<TOption>,
+    DropdownIcon = Icon,
+}: DropdownProps<TOption>) {
     const getDisplay = () => {
         return placeholder;
     };
@@ -34,13 +44,17 @@ const Dropdown: React.FC<DropdownProps> = ({
                     <div className='dropdown-selected-value'>{getDisplay()}</div>
                     <div className='dropdown-tools'>
                         <div className='dropdown-tool'>
-                            <Icon />
+                            <DropdownIcon />
                         </div>
                     </div>
+                </div>
+
+                <div className='dropdown-menu'>
+                    {options.map((option, i) => renderOption(option))}
                 </div>
             </div>
         </>
     );
-};
+}
 
 export default Dropdown;
