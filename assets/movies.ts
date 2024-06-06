@@ -1,5 +1,12 @@
+import { ReactNode } from 'react';
+
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-export const movies = [
+export interface Movies {
+    label: string;
+    year: number;
+}
+
+export const movies: Movies[] = [
     { label: 'The Shawshank Redemption', year: 1994 },
     { label: 'The Godfather', year: 1972 },
     { label: 'The Godfather: Part II', year: 1974 },

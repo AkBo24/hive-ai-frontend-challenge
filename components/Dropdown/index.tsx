@@ -2,19 +2,21 @@
 import React, { ReactNode, useState } from 'react';
 import '@/components/Dropdown/styles.css';
 
-type RenderOptionProps<TOption extends ReactNode> = {
+type RenderOptionProps<TOption> = {
     option: TOption;
+    label: ReactNode;
     selectedOptions: Set<TOption>;
     multiple: boolean;
     setSetselectedOptions: React.Dispatch<React.SetStateAction<Set<TOption>>>;
 };
 
-type DropdownProps<TOption extends ReactNode> = {
+type DropdownProps<TOption> = {
     placeholder?: string;
     label?: string;
     multiple?: boolean;
     options: TOption[];
-    RenderOption?: React.ElementType<RenderOptionProps<TOption>>;
+    // RenderOption?: React.ElementType<RenderOptionProps<TOption>>;
+    renderOption?: (item: TOption) => React.ReactNode;
     ClearIcon?: React.ElementType;
     DropdownIcon?: React.ElementType;
 };
@@ -35,8 +37,9 @@ const CloseIcon = () => {
     );
 };
 
-function GetOptionLabel<TOption extends ReactNode>({
+function GetOptionLabel<TOption>({
     option,
+    label,
     multiple,
     selectedOptions,
     setSetselectedOptions,
@@ -57,17 +60,18 @@ function GetOptionLabel<TOption extends ReactNode>({
             className={`dropdown-option ${
                 selectedOptions.has(option) && 'dropdown-option-selected'
             }`}>
-            {option}
+            {label}
         </p>
     );
 }
 
-function Dropdown<TOption extends ReactNode>({
+function Dropdown<TOption>({
     label = '',
     placeholder = '',
     multiple = false,
     options,
-    RenderOption = GetOptionLabel<TOption>,
+    // RenderOption = GetOptionLabel<TOption>,
+    renderOption = (option: TOption) => `${option}`,
     ClearIcon = CloseIcon,
     DropdownIcon = Icon,
 }: DropdownProps<TOption>) {
@@ -79,8 +83,10 @@ function Dropdown<TOption extends ReactNode>({
             return (
                 <div className='dropdown-chips'>
                     {Array.from(selectedOptions).map((option) => (
-                        <div key={`option-selected-${option}`} className='dropdown-chip'>
-                            {option}
+                        <div
+                            key={`option-selected-${renderOption(option)}`}
+                            className='dropdown-chip'>
+                            {renderOption(option)}
                             <span
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -96,14 +102,13 @@ function Dropdown<TOption extends ReactNode>({
                 </div>
             );
         } else if (selectedOptions.size !== 0 && !multiple) {
-            return Array.from(selectedOptions)[0];
+            return renderOption(Array.from(selectedOptions)[0]);
         }
         return placeholder;
     };
     return (
         <div>
             <label className='dropdown-label-text-s dropdown-label-hushed dropdown-label-spacing'>
-                {/* {...getLabelProps()} */}
                 {label}
             </label>
             <div className='dropdown-container'>
@@ -125,9 +130,10 @@ function Dropdown<TOption extends ReactNode>({
                 {open && (
                     <div className={`dropdown-menu`}>
                         {options.map((option, i) => (
-                            <RenderOption
+                            <GetOptionLabel
                                 key={`option-${i}`}
                                 option={option}
+                                label={renderOption(option)}
                                 multiple={multiple}
                                 selectedOptions={selectedOptions}
                                 setSetselectedOptions={setSetselectedOptions}
