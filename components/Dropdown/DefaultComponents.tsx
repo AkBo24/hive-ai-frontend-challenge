@@ -31,13 +31,12 @@ export function GetOptionLabel<TOption>({
     selectedOptions,
     setSetselectedOptions,
 }: RenderOptionProps<TOption>) {
-    const selections = multiple ? new Set(selectedOptions as TOption[]) : selectedOptions;
     return (
         <p
             key={`option-${option}`}
             onClick={() => {
                 if (multiple) {
-                    let newSet = new Set(selections as Set<TOption>);
+                    let newSet = new Set(selectedOptions as Set<TOption>);
                     if (newSet.has(option)) newSet.delete(option);
                     else newSet.add(option);
                     setSetselectedOptions(Array.from(newSet));
@@ -46,8 +45,9 @@ export function GetOptionLabel<TOption>({
                 }
             }}
             className={`dropdown-option ${
-                (multiple && (selections as Set<TOption>).has(option)) ||
-                option === selections
+                multiple
+                    ? true
+                    : option === selectedOptions
                     ? 'dropdown-option-selected'
                     : ''
             }`}>

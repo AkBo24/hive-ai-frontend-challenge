@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '@/components/Dropdown/styles.css';
 import {
     CloseIcon,
@@ -40,7 +40,7 @@ function Dropdown<TOption>({
     >(controlledSelectedOptions ?? (multiple ? [] : undefined));
 
     const updateSelection = (options: TOption[] | TOption | undefined) => {
-        return controlledSetSelectedOptions ?? setSelectedOptions;
+        (controlledSetSelectedOptions ?? setSelectedOptions)(options);
     };
 
     const getDisplay = () => {
@@ -106,7 +106,7 @@ function Dropdown<TOption>({
                             {ClearIcon ? (
                                 <span
                                     onClick={() =>
-                                        setSelectedOptions(multiple ? [] : undefined)
+                                        updateSelection(multiple ? [] : undefined)
                                     }>
                                     <ClearIcon />
                                 </span>
@@ -125,8 +125,10 @@ function Dropdown<TOption>({
                                 option={option}
                                 label={renderOption(option)}
                                 multiple={multiple}
-                                selectedOptions={selectedOptions}
-                                setSetselectedOptions={setSelectedOptions}
+                                selectedOptions={
+                                    controlledSelectedOptions ?? selectedOptions
+                                }
+                                setSetselectedOptions={updateSelection}
                             />
                         ))}
                     </div>
