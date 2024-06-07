@@ -10,7 +10,7 @@ export default function Home() {
             </h1>
             <div className={styles.dropdowns}>
                 <UncontrolledDropdown />
-                {/* <ControlledDropdown /> */}
+                <ControlledDropdown />
             </div>
         </main>
     );

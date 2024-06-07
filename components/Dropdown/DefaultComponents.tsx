@@ -21,9 +21,7 @@ type RenderOptionProps<TOption> = {
     label: ReactNode;
     selectedOptions: TOption[] | TOption | undefined;
     multiple: boolean;
-    setSetselectedOptions: React.Dispatch<
-        React.SetStateAction<TOption[] | TOption | undefined>
-    >;
+    setSetselectedOptions(options: TOption[] | TOption | undefined): void;
 };
 
 export function GetOptionLabel<TOption>({
