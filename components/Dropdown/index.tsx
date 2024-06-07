@@ -17,7 +17,7 @@ type DropdownProps<TOption> = {
     selectedOptions?: TOption[] | TOption;
     setSelectedOptions?(options: TOption[] | TOption | undefined): void;
     renderOption?: (item: TOption) => React.ReactNode;
-    ClearIcon?: React.ElementType;
+    ClearIcon?: React.ElementType | null;
     DropdownIcon?: React.ElementType;
 };
 
@@ -37,7 +37,7 @@ function Dropdown<TOption>({
     const [open, setOpen] = useState<boolean>(controlledOpen ?? false);
     const [selectedOptions, setSelectedOptions] = useState<
         TOption[] | TOption | undefined
-    >(controlledSelectedOptions ?? (multiple ? [] : undefined));
+    >(multiple ? [] : undefined);
 
     const updateSelection = (options: TOption[] | TOption | undefined) => {
         console.log(options);
@@ -46,8 +46,9 @@ function Dropdown<TOption>({
     };
 
     const getDisplay = () => {
-        if (multiple && (selectedOptions as TOption[]).length !== 0) {
-            const options = (controlledSelectedOptions ?? selectedOptions) as TOption[];
+        const options = (controlledSelectedOptions ?? selectedOptions) as TOption[];
+        if (multiple && (options as TOption[]).length !== 0) {
+            console.log('multiple fired', options);
 
             return (
                 <div className='dropdown-chips'>
@@ -74,8 +75,8 @@ function Dropdown<TOption>({
                     ))}
                 </div>
             );
-        } else if (!multiple && selectedOptions) {
-            return renderOption(selectedOptions as TOption);
+        } else if (!multiple && options) {
+            return renderOption(options as TOption);
         }
         return placeholder;
     };

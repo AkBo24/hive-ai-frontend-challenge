@@ -33,18 +33,13 @@ export function GetOptionLabel<TOption>({
     setSetselectedOptions,
     renderOption,
 }: RenderOptionProps<TOption>) {
-    let isSelected = false;
-
     const optionLabel = renderOption(option);
 
-    if (multiple) {
-        isSelected =
-            (selectedOptions as TOption[]).filter(
-                (other) => renderOption(other) === optionLabel
-            ).length > 0;
-    } else {
-        isSelected = option === selectedOptions;
-    }
+    let isSelected = multiple
+        ? (selectedOptions as TOption[]).filter(
+              (other) => renderOption(other) === optionLabel
+          ).length > 0
+        : option === selectedOptions;
 
     return (
         <p
@@ -56,7 +51,8 @@ export function GetOptionLabel<TOption>({
                     else newSet.add(option);
                     setSetselectedOptions(Array.from(newSet));
                 } else {
-                    setSetselectedOptions(option);
+                    if (selectedOptions && isSelected) setSetselectedOptions(undefined);
+                    else setSetselectedOptions(option);
                 }
             }}
             className={`dropdown-option ${isSelected && 'dropdown-option-selected'}`}>

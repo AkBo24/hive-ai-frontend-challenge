@@ -23,6 +23,7 @@ const ControlledDropdown = () => {
                         setSingleMovie(option);
                     }}
                     setOpen={() => setSingleOpen(!singleOpen)}
+                    ClearIcon={null}
                 />
             </div>
             <>
