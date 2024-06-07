@@ -35,12 +35,12 @@ function Dropdown<TOption>({
     DropdownIcon = DropdownIconComponent,
 }: DropdownProps<TOption>) {
     const [open, setOpen] = useState<boolean>(controlledOpen ?? false);
-    const [selectedOptions, setSetselectedOptions] = useState<Set<TOption>>(
-        new Set(controlledSelectedOptions) ?? new Set()
+    const [selectedOptions, setSetSelectedOptions] = useState<TOption[]>(
+        controlledSelectedOptions ?? []
     );
 
     const getDisplay = () => {
-        if (selectedOptions.size !== 0 && multiple) {
+        if (selectedOptions.length !== 0 && multiple) {
             return (
                 <div className='dropdown-chips'>
                     {Array.from(selectedOptions).map((option) => (
@@ -53,7 +53,13 @@ function Dropdown<TOption>({
                                     e.stopPropagation();
                                     const newSet = new Set(selectedOptions);
                                     newSet.delete(option);
-                                    setSetselectedOptions(newSet);
+                                    setSetSelectedOptions(
+                                        selectedOptions.filter(
+                                            (other) =>
+                                                renderOption(other) !==
+                                                renderOption(option)
+                                        )
+                                    );
                                 }}
                                 className='dropdown-chip-close'>
                                 <CloseIcon />
@@ -62,7 +68,7 @@ function Dropdown<TOption>({
                     ))}
                 </div>
             );
-        } else if (selectedOptions.size !== 0 && !multiple) {
+        } else if (selectedOptions.length !== 0 && !multiple) {
             return renderOption(Array.from(selectedOptions)[0]);
         }
         return placeholder;
@@ -86,7 +92,7 @@ function Dropdown<TOption>({
                     <div className='dropdown-tools'>
                         <div className='dropdown-tool'>
                             {ClearIcon ? (
-                                <span onClick={() => setSetselectedOptions(new Set())}>
+                                <span onClick={() => setSetSelectedOptions([])}>
                                     <ClearIcon />
                                 </span>
                             ) : null}
@@ -105,7 +111,7 @@ function Dropdown<TOption>({
                                 label={renderOption(option)}
                                 multiple={multiple}
                                 selectedOptions={selectedOptions}
-                                setSetselectedOptions={setSetselectedOptions}
+                                setSetselectedOptions={setSetSelectedOptions}
                             />
                         ))}
                     </div>

@@ -8,6 +8,7 @@ const UncontrolledDropdown = () => {
             label='Movies (Uncontrolled & Multi Select)'
             placeholder='Select...'
             options={movies.map((movie) => movie.label)}
+            multiple
         />
     );
 };

@@ -19,9 +19,9 @@ export const CloseIcon = () => {
 type RenderOptionProps<TOption> = {
     option: TOption;
     label: ReactNode;
-    selectedOptions: Set<TOption>;
+    selectedOptions: TOption[] | TOption;
     multiple: boolean;
-    setSetselectedOptions: React.Dispatch<React.SetStateAction<Set<TOption>>>;
+    setSetselectedOptions: React.Dispatch<React.SetStateAction<TOption[] | TOption>>;
 };
 
 export function GetOptionLabel<TOption>({
@@ -31,21 +31,25 @@ export function GetOptionLabel<TOption>({
     selectedOptions,
     setSetselectedOptions,
 }: RenderOptionProps<TOption>) {
+    const selections = multiple ? new Set(selectedOptions as TOption[]) : selectedOptions;
     return (
         <p
             key={`option-${option}`}
             onClick={() => {
                 if (multiple) {
-                    let newSet = new Set(selectedOptions);
-                    if (selectedOptions.has(option)) newSet.delete(option);
+                    let newSet = new Set(selections as Set<TOption>);
+                    if (newSet.has(option)) newSet.delete(option);
                     else newSet.add(option);
-                    setSetselectedOptions(newSet);
+                    setSetselectedOptions(Array.from(newSet));
                 } else {
-                    setSetselectedOptions(new Set([option]));
+                    setSetselectedOptions(option);
                 }
             }}
             className={`dropdown-option ${
-                selectedOptions.has(option) && 'dropdown-option-selected'
+                (multiple && (selections as Set<TOption>).has(option)) ||
+                option === selections
+                    ? 'dropdown-option-selected'
+                    : ''
             }`}>
             {label}
         </p>
