@@ -76,3 +76,7 @@
   display: flex;
   align-items: center;
 }
+
+.dropdown-tools {
+  display: flex;
+}

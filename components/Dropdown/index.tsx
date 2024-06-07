@@ -40,16 +40,12 @@ function Dropdown<TOption>({
     >(multiple ? [] : undefined);
 
     const updateSelection = (options: TOption[] | TOption | undefined) => {
-        console.log(options);
-
         (controlledSetSelectedOptions ?? setSelectedOptions)(options);
     };
 
     const getDisplay = () => {
         const options = (controlledSelectedOptions ?? selectedOptions) as TOption[];
         if (multiple && (options as TOption[]).length !== 0) {
-            console.log('multiple fired', options);
-
             return (
                 <div className='dropdown-chips'>
                     {options.map((option) => (
@@ -97,18 +93,15 @@ function Dropdown<TOption>({
                     }}>
                     <div className='dropdown-selected-value'>{getDisplay()}</div>
                     <div className='dropdown-tools'>
-                        <div className='dropdown-tool'>
-                            {ClearIcon ? (
-                                <span
-                                    onClick={() =>
-                                        updateSelection(multiple ? [] : undefined)
-                                    }>
-                                    <ClearIcon />
-                                </span>
-                            ) : null}
-
-                            <DropdownIcon />
-                        </div>
+                        {ClearIcon ? (
+                            <span
+                                onClick={() =>
+                                    updateSelection(multiple ? [] : undefined)
+                                }>
+                                <ClearIcon />
+                            </span>
+                        ) : null}
+                        <DropdownIcon />
                     </div>
                 </div>
 

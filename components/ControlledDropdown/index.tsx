@@ -35,7 +35,6 @@ const ControlledDropdown = () => {
                     open={multipleOpen}
                     selectedOptions={multipleMovie}
                     setSelectedOptions={(option: Movies[]) => {
-                        console.log(option);
                         setMultipleMovie(option);
                     }}
                     setOpen={() => setMultipleOpen(!multipleOpen)}
