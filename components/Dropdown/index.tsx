@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '@/components/Dropdown/styles.css';
 import {
     CloseIcon,
@@ -13,7 +13,7 @@ type DropdownProps<TOption> = {
     multiple?: boolean;
     options: TOption[];
     open?: boolean;
-    setOpen?(): void;
+    setOpen?(open?: boolean): void;
     selectedOptions?: TOption[] | TOption;
     setSelectedOptions?(options: TOption[] | TOption | undefined): void;
     renderOption?: (item: TOption) => React.ReactNode;
@@ -38,10 +38,27 @@ function Dropdown<TOption>({
     const [selectedOptions, setSelectedOptions] = useState<
         TOption[] | TOption | undefined
     >(multiple ? [] : undefined);
+    const ref = useRef<HTMLDivElement>(null);
 
     const updateSelection = (options: TOption[] | TOption | undefined) => {
         (controlledSetSelectedOptions ?? setSelectedOptions)(options);
     };
+
+    useEffect(() => {
+        const handler = (e: any) => {
+            console.log(ref);
+
+            if (ref.current && !ref.current.contains(e.target)) {
+                if (controlledSetOpen) controlledSetOpen(false);
+                else setOpen(false);
+            }
+        };
+
+        window.addEventListener('click', handler);
+        return () => {
+            window.removeEventListener('click', handler);
+        };
+    }, [open, controlledOpen, controlledSetOpen]);
 
     const getDisplay = () => {
         const options = (controlledSelectedOptions ?? selectedOptions) as TOption[];
@@ -90,7 +107,8 @@ function Dropdown<TOption>({
                         } else {
                             setOpen(!open);
                         }
-                    }}>
+                    }}
+                    ref={ref}>
                     <div className='dropdown-selected-value'>{getDisplay()}</div>
                     <div className='dropdown-tools'>
                         {ClearIcon ? (

@@ -1,17 +1,20 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from '@/components/Dropdown';
 import { Movie, movies } from '@/assets/movies';
 
 const ControlledDropdown = () => {
     const [singleOpen, setSingleOpen] = useState<boolean>(false);
-    const [singleMovie, setSingleMovie] = useState<Movie | undefined>(movies[1]);
+    const [singleMovie, setSingleMovie] = useState<Movie | undefined>(undefined);
     const [multipleOpen, setMultipleOpen] = useState<boolean>(true);
     const [multipleMovie, setMultipleMovie] = useState<Movie[]>([movies[1], movies[3]]);
     return (
         <>
             <div>
-                <p>Selected movie: {`${singleMovie?.label}, ${singleMovie?.year}`}</p>
+                <p>
+                    Selected movie:{' '}
+                    {singleMovie ? `${singleMovie?.label}, ${singleMovie?.year}` : 'none'}
+                </p>
                 <Dropdown<Movie>
                     label='Color (Controlled & Single Select)'
                     placeholder='Select...'
@@ -22,7 +25,7 @@ const ControlledDropdown = () => {
                     setSelectedOptions={(option: Movie | undefined) => {
                         setSingleMovie(option);
                     }}
-                    setOpen={() => setSingleOpen(!singleOpen)}
+                    setOpen={(open?: boolean) => setSingleOpen(open ?? !singleOpen)}
                     ClearIcon={null}
                 />
             </div>
@@ -37,7 +40,7 @@ const ControlledDropdown = () => {
                     setSelectedOptions={(option: Movie[]) => {
                         setMultipleMovie(option);
                     }}
-                    setOpen={() => setMultipleOpen(!multipleOpen)}
+                    setOpen={(open?: boolean) => setMultipleOpen(open ?? !multipleOpen)}
                     multiple
                 />
 

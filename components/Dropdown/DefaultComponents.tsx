@@ -44,7 +44,8 @@ export function GetOptionLabel<TOption>({
     return (
         <p
             key={`option-${option}`}
-            onClick={() => {
+            onClick={(e) => {
+                e.stopPropagation();
                 if (multiple) {
                     let newSet = new Set(selectedOptions as Set<TOption>);
                     if (newSet.has(option)) newSet.delete(option);

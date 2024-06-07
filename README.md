@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, ensure you have `NPM` installed an any dependencies necessary to run a React (Next.JS) project.
+First, ensure you have `NPM` installed and any dependencies necessary to run a React (Next.JS) project.
 Then run the development server:
 
 ```bash
