@@ -39,10 +39,10 @@ The code for the dropdown component and its implementations are found in `@/comp
   |-index.ts              # contains two uncontrolled implementations of the dropdown
 ```
 
-### Resource Acknowledgement
+### Acknowledgements
+
+-   The search functionality is not as performant as I'd like to be for large lists (>150 items). The experience can be improved by adding an UI element indicating it is searching. Performance wise, we can preprocess the list into a searchable form (maybe using a prefix tree) that can efficiently return the filtered results.
+
+#### Resource Acknowledgement
 
 -   SVG's were taken from [google material icon](https://fonts.google.com/icons)
-
-#### AI Acknowledgement
-
-AI (ChatGPT) was used to fix minor syntax errors.
