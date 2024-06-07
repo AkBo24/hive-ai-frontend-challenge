@@ -40,12 +40,15 @@ function Dropdown<TOption>({
     >(controlledSelectedOptions ?? (multiple ? [] : undefined));
 
     const updateSelection = (options: TOption[] | TOption | undefined) => {
+        console.log(options);
+
         (controlledSetSelectedOptions ?? setSelectedOptions)(options);
     };
 
     const getDisplay = () => {
         if (multiple && (selectedOptions as TOption[]).length !== 0) {
-            const options = selectedOptions as TOption[];
+            const options = (controlledSelectedOptions ?? selectedOptions) as TOption[];
+
             return (
                 <div className='dropdown-chips'>
                     {options.map((option) => (
@@ -63,15 +66,6 @@ function Dropdown<TOption>({
                                                 renderOption(option)
                                         )
                                     );
-                                    // const newSet = new Set(selectedOptions);
-                                    // newSet.delete(option);
-                                    // setSetSelectedOptions(
-                                    //     selectedOptions.filter(
-                                    //         (other) =>
-                                    //             renderOption(other) !==
-                                    //             renderOption(option)
-                                    //     )
-                                    // );
                                 }}
                                 className='dropdown-chip-close'>
                                 <CloseIcon />
@@ -129,6 +123,7 @@ function Dropdown<TOption>({
                                     controlledSelectedOptions ?? selectedOptions
                                 }
                                 setSetselectedOptions={updateSelection}
+                                renderOption={renderOption}
                             />
                         ))}
                     </div>
