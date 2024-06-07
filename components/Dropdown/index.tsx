@@ -17,6 +17,7 @@ type DropdownProps<TOption> = {
     selectedOptions?: TOption[] | TOption;
     setSelectedOptions?(options: TOption[] | TOption | undefined): void;
     renderOption?: (item: TOption) => React.ReactNode;
+    OptionLabel?: React.ElementType;
     ClearIcon?: React.ElementType | null;
     DropdownIcon?: React.ElementType;
 };
@@ -31,19 +32,23 @@ function Dropdown<TOption>({
     selectedOptions: controlledSelectedOptions,
     setSelectedOptions: controlledSetSelectedOptions,
     renderOption = (option: TOption) => `${option}`,
+    OptionLabel = GetOptionLabel,
     ClearIcon = CloseIcon,
     DropdownIcon = DropdownIconComponent,
 }: DropdownProps<TOption>) {
+    // states
     const [open, setOpen] = useState<boolean>(controlledOpen ?? false);
     const [selectedOptions, setSelectedOptions] = useState<
         TOption[] | TOption | undefined
     >(multiple ? [] : undefined);
     const ref = useRef<HTMLDivElement>(null);
 
+    // state handler depending if the component is controlled
     const updateSelection = (options: TOption[] | TOption | undefined) => {
         (controlledSetSelectedOptions ?? setSelectedOptions)(options);
     };
 
+    // enables clicking out of the component to close it
     useEffect(() => {
         const handler = (e: any) => {
             console.log(ref);
@@ -60,6 +65,7 @@ function Dropdown<TOption>({
         };
     }, [open, controlledOpen, controlledSetOpen]);
 
+    // displays the labels of the options via `renderOption` function
     const getDisplay = () => {
         const options = (controlledSelectedOptions ?? selectedOptions) as TOption[];
         if (multiple && (options as TOption[]).length !== 0) {
@@ -127,7 +133,7 @@ function Dropdown<TOption>({
                 {(controlledOpen ?? open) && (
                     <div className={`dropdown-menu`}>
                         {options.map((option, i) => (
-                            <GetOptionLabel
+                            <OptionLabel
                                 key={`option-${i}`}
                                 option={option}
                                 label={renderOption(option)}
