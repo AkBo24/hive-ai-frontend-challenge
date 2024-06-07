@@ -113,9 +113,10 @@ function Dropdown<TOption>({
                     <div className='dropdown-tools'>
                         {ClearIcon ? (
                             <span
-                                onClick={() =>
-                                    updateSelection(multiple ? [] : undefined)
-                                }>
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateSelection(multiple ? [] : undefined);
+                                }}>
                                 <ClearIcon />
                             </span>
                         ) : null}
