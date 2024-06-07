@@ -9,6 +9,7 @@ const UncontrolledDropdown = () => {
                 label='Movies (Uncontrolled & Single Select)'
                 placeholder='Select...'
                 options={movies.map((movie) => movie.label)}
+                searchable
             />
 
             <Dropdown<string>
@@ -16,6 +17,7 @@ const UncontrolledDropdown = () => {
                 placeholder='Select...'
                 options={movies.map((movie) => movie.label)}
                 multiple
+                searchable
             />
         </>
     );

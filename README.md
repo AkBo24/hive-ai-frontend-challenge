@@ -38,3 +38,11 @@ The code for the dropdown component and its implementations are found in `@/comp
 |-UncontrolledDropdown
   |-index.ts              # contains two uncontrolled implementations of the dropdown
 ```
+
+### Resource Acknowledgement
+
+-   SVG's were taken from [google material icon](https://fonts.google.com/icons)
+
+#### AI Acknowledgement
+
+AI (ChatGPT) was used to fix minor syntax errors.

@@ -5,12 +5,14 @@ import {
     CloseIcon,
     DropdownIcon as DropdownIconComponent,
     GetOptionLabel,
+    SearchIcon,
 } from './DefaultComponents';
 
 type DropdownProps<TOption> = {
     placeholder?: string;
     label?: string;
     multiple?: boolean;
+    searchable?: boolean;
     options: TOption[];
     open?: boolean;
     setOpen?(open?: boolean): void;
@@ -26,6 +28,7 @@ function Dropdown<TOption>({
     label = '',
     placeholder = '',
     multiple = false,
+    searchable = false,
     options,
     open: controlledOpen,
     setOpen: controlledSetOpen,
@@ -42,28 +45,13 @@ function Dropdown<TOption>({
         TOption[] | TOption | undefined
     >(multiple ? [] : undefined);
     const ref = useRef<HTMLDivElement>(null);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filteredOptions, setFilteredOptions] = useState<TOption[] | null>(null);
 
     // state handler depending if the component is controlled
     const updateSelection = (options: TOption[] | TOption | undefined) => {
         (controlledSetSelectedOptions ?? setSelectedOptions)(options);
     };
-
-    // enables clicking out of the component to close it
-    useEffect(() => {
-        const handler = (e: any) => {
-            console.log(ref);
-
-            if (ref.current && !ref.current.contains(e.target)) {
-                if (controlledSetOpen) controlledSetOpen(false);
-                else setOpen(false);
-            }
-        };
-
-        window.addEventListener('click', handler);
-        return () => {
-            window.removeEventListener('click', handler);
-        };
-    }, [open, controlledOpen, controlledSetOpen]);
 
     // displays the labels of the options via `renderOption` function
     const getDisplay = () => {
@@ -99,6 +87,29 @@ function Dropdown<TOption>({
         }
         return placeholder;
     };
+
+    const getFilteredOptions = () => {
+        if (!searchTerm) return options;
+        return options.filter((option) =>
+            renderOption(option)?.toString().toLowerCase().includes(searchTerm)
+        );
+    };
+
+    // enables clicking out of the component to close it
+    useEffect(() => {
+        const handler = (e: any) => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                if (controlledSetOpen) controlledSetOpen(false);
+                else setOpen(false);
+            }
+        };
+
+        window.addEventListener('click', handler);
+        return () => {
+            window.removeEventListener('click', handler);
+        };
+    }, [open, controlledOpen, controlledSetOpen]);
+
     return (
         <div>
             <label className='dropdown-label-text-s dropdown-label-hushed dropdown-label-spacing'>
@@ -131,8 +142,17 @@ function Dropdown<TOption>({
                 </div>
 
                 {(controlledOpen ?? open) && (
-                    <div className={`dropdown-menu`}>
-                        {options.map((option, i) => (
+                    <div className={`dropdown-menu`} onClick={(e) => e.stopPropagation()}>
+                        {searchable && (
+                            <div className='dropdown-search-container'>
+                                <input
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    value={searchTerm}
+                                />
+                                <SearchIcon />
+                            </div>
+                        )}
+                        {getFilteredOptions().map((option, i) => (
                             <OptionLabel
                                 key={`option-${i}`}
                                 option={option}
