@@ -61,11 +61,3 @@ export function GetOptionLabel<TOption>({
         </p>
     );
 }
-
-export const SearchBox = () => {
-    return (
-        <div className='search-box'>
-            {/*  <input onChange={onSearch} value={searchValue} ref={searchRef} /> */}
-        </div>
-    );
-};
