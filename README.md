@@ -25,15 +25,16 @@ When opening the project, you should see four dropdowns. The first two are uncon
 
 ### Project Structure
 
-The code to build the dropdowns and implement them are found in `@/components` where `@` is the root directory.
+The code for the dropdown component and its implementations are found in `@/components` directory (where `@` is the root directory).
 
 ```
 @/components
 |-ControlledDropdown
-  |-index.tsx        # contains two controlled implementations of the dropdown
+  |-index.tsx             # contains two controlled implementations of the dropdown
 |-Dropdown
-  |-DefaultComponents.tsx # has components that are rendered by default if parent components do not specifically pass in rendering components
-  |-index.tsx # the actual dropdown component
+  |-DefaultComponents.tsx # has components that are rendered by default
+                          # if parent components do not specifically pass in rendering components
+  |-index.tsx             # the actual dropdown component
 |-UncontrolledDropdown
-  |-index.ts # contains two uncontrolled implementations of the dropdown
+  |-index.ts              # contains two uncontrolled implementations of the dropdown
 ```

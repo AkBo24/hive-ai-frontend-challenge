@@ -1,25 +1,25 @@
 'use client';
 import React, { useState } from 'react';
 import Dropdown from '@/components/Dropdown';
-import { Movies, movies } from '@/assets/movies';
+import { Movie, movies } from '@/assets/movies';
 
 const ControlledDropdown = () => {
     const [singleOpen, setSingleOpen] = useState<boolean>(false);
-    const [singleMovie, setSingleMovie] = useState<Movies | undefined>(movies[1]);
+    const [singleMovie, setSingleMovie] = useState<Movie | undefined>(movies[1]);
     const [multipleOpen, setMultipleOpen] = useState<boolean>(true);
-    const [multipleMovie, setMultipleMovie] = useState<Movies[]>([movies[1], movies[3]]);
+    const [multipleMovie, setMultipleMovie] = useState<Movie[]>([movies[1], movies[3]]);
     return (
         <>
             <div>
                 <p>Selected movie: {`${singleMovie?.label}, ${singleMovie?.year}`}</p>
-                <Dropdown<Movies>
+                <Dropdown<Movie>
                     label='Color (Controlled & Single Select)'
                     placeholder='Select...'
                     options={movies}
                     renderOption={({ label, year }) => `${label} (${year})`}
                     open={singleOpen}
                     selectedOptions={singleMovie}
-                    setSelectedOptions={(option: Movies | undefined) => {
+                    setSelectedOptions={(option: Movie | undefined) => {
                         setSingleMovie(option);
                     }}
                     setOpen={() => setSingleOpen(!singleOpen)}
@@ -27,14 +27,14 @@ const ControlledDropdown = () => {
                 />
             </div>
             <>
-                <Dropdown<Movies>
+                <Dropdown<Movie>
                     label='Color (Controlled & Multi Select)'
                     placeholder='Select...'
                     options={movies}
                     renderOption={({ label, year }) => `${label} (${year})`}
                     open={multipleOpen}
                     selectedOptions={multipleMovie}
-                    setSelectedOptions={(option: Movies[]) => {
+                    setSelectedOptions={(option: Movie[]) => {
                         setMultipleMovie(option);
                     }}
                     setOpen={() => setMultipleOpen(!multipleOpen)}
