@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '@/components/Dropdown/styles.css';
 import {
     CloseIcon,
@@ -15,7 +15,7 @@ type DropdownProps<TOption> = {
     open?: boolean;
     setOpen?(): void;
     selectedOptions?: TOption[] | TOption;
-    setSelectedOptions?(optoins: TOption[] | TOption): void;
+    setSelectedOptions?(options: TOption[] | TOption | undefined): void;
     renderOption?: (item: TOption) => React.ReactNode;
     ClearIcon?: React.ElementType;
     DropdownIcon?: React.ElementType;
@@ -35,13 +35,20 @@ function Dropdown<TOption>({
     DropdownIcon = DropdownIconComponent,
 }: DropdownProps<TOption>) {
     const [open, setOpen] = useState<boolean>(controlledOpen ?? false);
-    const [selectedOptions, setSetSelectedOptions] = useState<
+    const [selectedOptions, setSelectedOptions] = useState<
         TOption[] | TOption | undefined
-    >(multiple ? [] : undefined);
+    >(controlledSelectedOptions ?? (multiple ? [] : undefined));
+
+    const updateSelection = (options: TOption[] | TOption | undefined) => {
+        console.log(options);
+
+        (controlledSetSelectedOptions ?? setSelectedOptions)(options);
+    };
 
     const getDisplay = () => {
         if (multiple && (selectedOptions as TOption[]).length !== 0) {
-            const options = selectedOptions as TOption[];
+            const options = (controlledSelectedOptions ?? selectedOptions) as TOption[];
+
             return (
                 <div className='dropdown-chips'>
                     {options.map((option) => (
@@ -52,22 +59,13 @@ function Dropdown<TOption>({
                             <span
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    setSetSelectedOptions(
+                                    updateSelection(
                                         options.filter(
                                             (other) =>
                                                 renderOption(other) !==
                                                 renderOption(option)
                                         )
                                     );
-                                    // const newSet = new Set(selectedOptions);
-                                    // newSet.delete(option);
-                                    // setSetSelectedOptions(
-                                    //     selectedOptions.filter(
-                                    //         (other) =>
-                                    //             renderOption(other) !==
-                                    //             renderOption(option)
-                                    //     )
-                                    // );
                                 }}
                                 className='dropdown-chip-close'>
                                 <CloseIcon />
@@ -102,7 +100,7 @@ function Dropdown<TOption>({
                             {ClearIcon ? (
                                 <span
                                     onClick={() =>
-                                        setSetSelectedOptions(multiple ? [] : undefined)
+                                        updateSelection(multiple ? [] : undefined)
                                     }>
                                     <ClearIcon />
                                 </span>
@@ -121,8 +119,11 @@ function Dropdown<TOption>({
                                 option={option}
                                 label={renderOption(option)}
                                 multiple={multiple}
-                                selectedOptions={selectedOptions}
-                                setSetselectedOptions={setSetSelectedOptions}
+                                selectedOptions={
+                                    controlledSelectedOptions ?? selectedOptions
+                                }
+                                setSetselectedOptions={updateSelection}
+                                renderOption={renderOption}
                             />
                         ))}
                     </div>

@@ -21,9 +21,8 @@ type RenderOptionProps<TOption> = {
     label: ReactNode;
     selectedOptions: TOption[] | TOption | undefined;
     multiple: boolean;
-    setSetselectedOptions: React.Dispatch<
-        React.SetStateAction<TOption[] | TOption | undefined>
-    >;
+    renderOption: (item: TOption) => React.ReactNode;
+    setSetselectedOptions(options: TOption[] | TOption | undefined): void;
 };
 
 export function GetOptionLabel<TOption>({
@@ -32,14 +31,27 @@ export function GetOptionLabel<TOption>({
     multiple,
     selectedOptions,
     setSetselectedOptions,
+    renderOption,
 }: RenderOptionProps<TOption>) {
-    const selections = multiple ? new Set(selectedOptions as TOption[]) : selectedOptions;
+    let isSelected = false;
+
+    const optionLabel = renderOption(option);
+
+    if (multiple) {
+        isSelected =
+            (selectedOptions as TOption[]).filter(
+                (other) => renderOption(other) === optionLabel
+            ).length > 0;
+    } else {
+        isSelected = option === selectedOptions;
+    }
+
     return (
         <p
             key={`option-${option}`}
             onClick={() => {
                 if (multiple) {
-                    let newSet = new Set(selections as Set<TOption>);
+                    let newSet = new Set(selectedOptions as Set<TOption>);
                     if (newSet.has(option)) newSet.delete(option);
                     else newSet.add(option);
                     setSetselectedOptions(Array.from(newSet));
@@ -47,12 +59,7 @@ export function GetOptionLabel<TOption>({
                     setSetselectedOptions(option);
                 }
             }}
-            className={`dropdown-option ${
-                (multiple && (selections as Set<TOption>).has(option)) ||
-                option === selections
-                    ? 'dropdown-option-selected'
-                    : ''
-            }`}>
+            className={`dropdown-option ${isSelected && 'dropdown-option-selected'}`}>
             {label}
         </p>
     );
