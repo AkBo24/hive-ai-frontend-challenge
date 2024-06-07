@@ -6,6 +6,7 @@ import { Movie, movies } from '@/assets/movies';
 const ControlledDropdown = () => {
     const [singleOpen, setSingleOpen] = useState<boolean>(false);
     const [singleMovie, setSingleMovie] = useState<Movie | undefined>(undefined);
+    const [singleSearch, setSingleSearch] = useState<string>('');
     const [multipleOpen, setMultipleOpen] = useState<boolean>(true);
     const [multipleMovie, setMultipleMovie] = useState<Movie[]>([movies[1], movies[3]]);
     return (
@@ -15,6 +16,7 @@ const ControlledDropdown = () => {
                     Selected movie:{' '}
                     {singleMovie ? `${singleMovie?.label}, ${singleMovie?.year}` : 'none'}
                 </p>
+                <p>Search Term: {singleSearch ? singleSearch : 'none'}</p>
                 <Dropdown<Movie>
                     label='Color (Controlled & Single Select)'
                     placeholder='Select...'
@@ -27,6 +29,9 @@ const ControlledDropdown = () => {
                     }}
                     setOpen={(open?: boolean) => setSingleOpen(open ?? !singleOpen)}
                     ClearIcon={null}
+                    searchTerm={singleSearch}
+                    setSearchTerm={(term: string) => setSingleSearch(term)}
+                    searchable
                 />
             </div>
             <>

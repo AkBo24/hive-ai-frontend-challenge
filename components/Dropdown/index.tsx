@@ -18,6 +18,8 @@ type DropdownProps<TOption> = {
     setOpen?(open?: boolean): void;
     selectedOptions?: TOption[] | TOption;
     setSelectedOptions?(options: TOption[] | TOption | undefined): void;
+    searchTerm?: string;
+    setSearchTerm?(term: string): void;
     renderOption?: (item: TOption) => React.ReactNode;
     OptionLabel?: React.ElementType;
     ClearIcon?: React.ElementType | null;
@@ -34,6 +36,8 @@ function Dropdown<TOption>({
     setOpen: controlledSetOpen,
     selectedOptions: controlledSelectedOptions,
     setSelectedOptions: controlledSetSelectedOptions,
+    searchTerm: controlledSearchTerm,
+    setSearchTerm: controlledSetSearchTerm,
     renderOption = (option: TOption) => `${option}`,
     OptionLabel = GetOptionLabel,
     ClearIcon = CloseIcon,
@@ -46,7 +50,6 @@ function Dropdown<TOption>({
     >(multiple ? [] : undefined);
     const ref = useRef<HTMLDivElement>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [filteredOptions, setFilteredOptions] = useState<TOption[] | null>(null);
 
     // state handler depending if the component is controlled
     const updateSelection = (options: TOption[] | TOption | undefined) => {
@@ -89,9 +92,10 @@ function Dropdown<TOption>({
     };
 
     const getFilteredOptions = () => {
-        if (!searchTerm) return options;
+        const search = (controlledSearchTerm ?? searchTerm).toLowerCase();
+        if (!search) return options;
         return options.filter((option) =>
-            renderOption(option)?.toString().toLowerCase().includes(searchTerm)
+            renderOption(option)?.toString().toLowerCase().includes(search)
         );
     };
 
@@ -146,8 +150,12 @@ function Dropdown<TOption>({
                         {searchable && (
                             <div className='dropdown-search-container'>
                                 <input
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    value={searchTerm}
+                                    onChange={(e) =>
+                                        (controlledSetSearchTerm ?? setSearchTerm)(
+                                            e.target.value
+                                        )
+                                    }
+                                    value={controlledSearchTerm ?? searchTerm}
                                 />
                                 <SearchIcon />
                             </div>
