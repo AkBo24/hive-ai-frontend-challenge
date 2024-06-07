@@ -19,9 +19,11 @@ export const CloseIcon = () => {
 type RenderOptionProps<TOption> = {
     option: TOption;
     label: ReactNode;
-    selectedOptions: TOption[] | TOption;
+    selectedOptions: TOption[] | TOption | undefined;
     multiple: boolean;
-    setSetselectedOptions: React.Dispatch<React.SetStateAction<TOption[] | TOption>>;
+    setSetselectedOptions: React.Dispatch<
+        React.SetStateAction<TOption[] | TOption | undefined>
+    >;
 };
 
 export function GetOptionLabel<TOption>({

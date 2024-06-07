@@ -14,8 +14,8 @@ type DropdownProps<TOption> = {
     options: TOption[];
     open?: boolean;
     setOpen?(): void;
-    selectedOptions?: TOption[];
-    setSelectedOptions?(optoins: TOption[]): void;
+    selectedOptions?: TOption[] | TOption;
+    setSelectedOptions?(optoins: TOption[] | TOption): void;
     renderOption?: (item: TOption) => React.ReactNode;
     ClearIcon?: React.ElementType;
     DropdownIcon?: React.ElementType;
@@ -35,15 +35,16 @@ function Dropdown<TOption>({
     DropdownIcon = DropdownIconComponent,
 }: DropdownProps<TOption>) {
     const [open, setOpen] = useState<boolean>(controlledOpen ?? false);
-    const [selectedOptions, setSetSelectedOptions] = useState<TOption[]>(
-        controlledSelectedOptions ?? []
-    );
+    const [selectedOptions, setSetSelectedOptions] = useState<
+        TOption[] | TOption | undefined
+    >(multiple ? [] : undefined);
 
     const getDisplay = () => {
-        if (selectedOptions.length !== 0 && multiple) {
+        if (multiple && (selectedOptions as TOption[]).length !== 0) {
+            const options = selectedOptions as TOption[];
             return (
                 <div className='dropdown-chips'>
-                    {Array.from(selectedOptions).map((option) => (
+                    {options.map((option) => (
                         <div
                             key={`option-selected-${renderOption(option)}`}
                             className='dropdown-chip'>
@@ -51,15 +52,22 @@ function Dropdown<TOption>({
                             <span
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const newSet = new Set(selectedOptions);
-                                    newSet.delete(option);
                                     setSetSelectedOptions(
-                                        selectedOptions.filter(
+                                        options.filter(
                                             (other) =>
                                                 renderOption(other) !==
                                                 renderOption(option)
                                         )
                                     );
+                                    // const newSet = new Set(selectedOptions);
+                                    // newSet.delete(option);
+                                    // setSetSelectedOptions(
+                                    //     selectedOptions.filter(
+                                    //         (other) =>
+                                    //             renderOption(other) !==
+                                    //             renderOption(option)
+                                    //     )
+                                    // );
                                 }}
                                 className='dropdown-chip-close'>
                                 <CloseIcon />
@@ -68,8 +76,8 @@ function Dropdown<TOption>({
                     ))}
                 </div>
             );
-        } else if (selectedOptions.length !== 0 && !multiple) {
-            return renderOption(Array.from(selectedOptions)[0]);
+        } else if (!multiple && selectedOptions) {
+            return renderOption(selectedOptions as TOption);
         }
         return placeholder;
     };
@@ -92,7 +100,10 @@ function Dropdown<TOption>({
                     <div className='dropdown-tools'>
                         <div className='dropdown-tool'>
                             {ClearIcon ? (
-                                <span onClick={() => setSetSelectedOptions([])}>
+                                <span
+                                    onClick={() =>
+                                        setSetSelectedOptions(multiple ? [] : undefined)
+                                    }>
                                     <ClearIcon />
                                 </span>
                             ) : null}
